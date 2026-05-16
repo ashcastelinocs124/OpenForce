@@ -1,0 +1,28 @@
+{
+  "name": "stage-advance",
+  "description": "Existing deal moves to negotiation/closing — single update.",
+  "email": {
+    "sender": "sam@acme.test",
+    "subject": "Re: Q3 Renewal",
+    "received_at": "2026-05-10T10:00:00Z",
+    "body_text": "Hi! We've reviewed the proposal and are ready to move forward — sending to procurement for signature this week."
+  },
+  "sf_state": {
+    "contacts": [
+      {"Id": "003xx000000000001", "FirstName": "Sam", "LastName": "Patel", "Email": "sam@acme.test", "AccountId": "001xx000000000001"}
+    ],
+    "opportunities": [
+      {"Id": "006xx000000000001", "AccountId": "001xx000000000001", "Name": "Acme - Q3 Renewal", "StageName": "Discovery", "Amount": 30000}
+    ]
+  },
+  "expect": {
+    "email_status": "proposed",
+    "proposals_count": 1,
+    "proposal": {
+      "sf_object_type": "Opportunity",
+      "sf_record_id": "006xx000000000001",
+      "after_contains_keys": ["StageName"],
+      "min_confidence": 0.5
+    }
+  }
+}

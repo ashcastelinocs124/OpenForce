@@ -1,0 +1,15 @@
+{
+  "name": "irrelevant-newsletter",
+  "description": "Newsletter / marketing email — should be marked irrelevant, no proposals.",
+  "email": {
+    "sender": "news@productupdates.example",
+    "subject": "[Newsletter] 7 productivity tips for Q3",
+    "received_at": "2026-05-12T08:00:00Z",
+    "body_text": "Read time: 5 min. This week we cover async standups, Notion templates, and time-blocking. Click below to read more..."
+  },
+  "sf_state": {"contacts": [], "opportunities": []},
+  "expect": {
+    "email_status": "irrelevant",
+    "proposals_count": 0
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "new-contact",
+  "description": "First-touch email from unknown sender — create Contact.",
+  "email": {
+    "sender": "alex@newco.io",
+    "subject": "Following up from the conference",
+    "received_at": "2026-05-11T12:00:00Z",
+    "body_text": "Hi — Alex Rivers from NewCo here. We chatted briefly at the booth yesterday about Salesforce admin pain. Mind if I send over a one-pager?"
+  },
+  "sf_state": {
+    "contacts": [],
+    "opportunities": []
+  },
+  "expect": {
+    "email_status": "proposed",
+    "proposals_count": 1,
+    "proposal": {
+      "sf_object_type": "Contact",
+      "sf_record_id": null,
+      "after_contains_keys": ["Email"],
+      "min_confidence": 0.5
+    }
+  }
+}
