@@ -1,7 +1,8 @@
 import httpx
+import pytest
 import respx
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, delete
+from sqlalchemy import create_engine, delete, select
 from sqlalchemy.orm import Session
 
 from openforce.config import get_settings
@@ -10,10 +11,7 @@ from openforce.main import app
 
 
 def _wipe_sf_integration() -> None:
-    """Sync wipe so we don't tangle with the async engine's event loop."""
     sync_url = get_settings().database_url_sync
-    if not sync_url:
-        return
     eng = create_engine(sync_url)
     with Session(eng) as s:
         s.execute(delete(Integration).where(Integration.provider == IntegrationProvider.salesforce))
@@ -38,7 +36,8 @@ def test_sf_start_returns_authorize_url():
         assert "response_type=code" in url
 
 
-def test_sf_callback_persists_tokens():
+@pytest.mark.asyncio
+async def test_sf_callback_persists_tokens():
     with respx.mock(assert_all_called=True) as rmock:
         rmock.post("https://login.salesforce.com/services/oauth2/token").mock(
             return_value=httpx.Response(
@@ -50,8 +49,9 @@ def test_sf_callback_persists_tokens():
                 },
             )
         )
-        with TestClient(app) as client:
-            r = client.get("/auth/salesforce/callback?code=abc")
+        transport = httpx.ASGITransport(app=app)
+        async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+            r = await client.get("/auth/salesforce/callback?code=abc")
             assert r.status_code == 200
             assert r.json() == {"status": "connected"}
 
@@ -59,9 +59,11 @@ def test_sf_callback_persists_tokens():
     eng = create_engine(sync_url)
     with Session(eng) as s:
         rows = s.execute(
-            delete(Integration).where(Integration.provider == IntegrationProvider.salesforce).returning(Integration.access_token)
+            select(Integration.access_token, Integration.instance_url).where(
+                Integration.provider == IntegrationProvider.salesforce
+            )
         ).fetchall()
-        s.commit()
-        assert rows, "expected one SF integration row"
+        assert rows
         assert rows[0][0] == "a-token"
+        assert rows[0][1] == "https://example.my.salesforce.com"
     eng.dispose()
