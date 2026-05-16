@@ -1,0 +1,23 @@
+{
+  "name": "multi-deal-thread",
+  "description": "Email references two deals at the same account — expect 2 proposals.",
+  "email": {
+    "sender": "sam@acme.test",
+    "subject": "Re: Q3 Renewal + onboarding services",
+    "received_at": "2026-05-13T15:00:00Z",
+    "body_text": "Two updates: (1) Q3 Renewal — we're closing it Friday. (2) Onboarding Services SOW — finance asked for net 60, can you confirm? Stage that one Proposal/Negotiation."
+  },
+  "sf_state": {
+    "contacts": [
+      {"Id": "003xx000000000001", "FirstName": "Sam", "LastName": "Patel", "Email": "sam@acme.test", "AccountId": "001xx000000000001"}
+    ],
+    "opportunities": [
+      {"Id": "006xx000000000001", "AccountId": "001xx000000000001", "Name": "Acme - Q3 Renewal", "StageName": "Negotiation", "Amount": 30000},
+      {"Id": "006xx000000000002", "AccountId": "001xx000000000001", "Name": "Acme - Onboarding Services", "StageName": "Discovery", "Amount": 15000}
+    ]
+  },
+  "expect": {
+    "email_status": "proposed",
+    "proposals_count_min": 2
+  }
+}

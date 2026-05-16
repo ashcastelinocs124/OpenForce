@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: openforce
+      POSTGRES_USER: openforce
+      POSTGRES_PASSWORD: openforce_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - openforce_pg:/var/lib/postgresql/data
+
+volumes:
+  openforce_pg:

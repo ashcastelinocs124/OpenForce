@@ -1,0 +1,23 @@
+{
+  "name": "ambiguous-sam",
+  "description": "Reference to 'Sam' with two matching contacts — expect low-confidence proposal that flags ambiguity in reasoning.",
+  "email": {
+    "sender": "ops@acme.test",
+    "subject": "Sam said yes",
+    "received_at": "2026-05-12T14:00:00Z",
+    "body_text": "Just looped in — Sam said yes on the proposal. Let's move it forward."
+  },
+  "sf_state": {
+    "contacts": [
+      {"Id": "003xx000000000001", "FirstName": "Sam", "LastName": "Patel", "Email": "sam.p@acme.test", "AccountId": "001xx000000000001"},
+      {"Id": "003xx000000000002", "FirstName": "Samuel", "LastName": "Rhodes", "Email": "sam.r@acme.test", "AccountId": "001xx000000000001"}
+    ],
+    "opportunities": []
+  },
+  "expect": {
+    "email_status": "proposed",
+    "proposals_count_min": 0,
+    "max_confidence": 0.5,
+    "reasoning_must_mention": ["ambig", "Sam"]
+  }
+}
